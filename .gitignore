@@ -1,0 +1,46 @@
+# Biến môi trường chứa thông tin nhạy cảm — KHÔNG commit
+.env
+# Template thì được commit
+# !.env.example
+
+# Maven build output
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+# IntelliJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+
+# VS Code
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Uploaded files (không commit ảnh người dùng)
+uploads/
+
+# Logs
+logs/
+*.log
+
+# Spring Boot config với thông tin nhạy cảm
+# (chỉ commit application.yml template, không commit file với credentials thực)
+# application-prod.yml
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+frontend/.env.local
+
+# Test & temp files
+test_out.json
+test_raw.txt
+api_result.json
+seed_rooms.js

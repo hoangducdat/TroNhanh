@@ -1,0 +1,83 @@
+# =============================================================
+#  TroNhanh Backend — Cấu hình ứng dụng Spring Boot 3
+#
+#  Các giá trị nhạy cảm được đọc từ file .env (qua spring-dotenv).
+#  Cú pháp: ${BIEN_MOI_TRUONG:gia_tri_mac_dinh}
+# =============================================================
+
+server:
+  port: ${SERVER_PORT:8080}
+  servlet:
+    context-path: /
+
+spring:
+  application:
+    name: tronhanh-backend
+
+  # ─────────────────────────────────────────
+  #  Kết nối MySQL 8.0
+  #  Đọc từ .env: DB_HOST, DB_PORT, DB_NAME, DB_USERNAME, DB_PASSWORD
+  # ─────────────────────────────────────────
+  datasource:
+    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:tronhanh_db}?useSSL=false&serverTimezone=Asia/Ho_Chi_Minh&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&useUnicode=true&connectionCollation=utf8mb4_unicode_ci
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+    # HikariCP connection pool
+    hikari:
+      pool-name: TroNhanhPool
+      maximum-pool-size: 10
+      minimum-idle: 3
+      idle-timeout: 30000
+      connection-timeout: 20000
+      max-lifetime: 1800000
+
+  # ─────────────────────────────────────────
+  #  JPA / Hibernate
+  # ─────────────────────────────────────────
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: true
+        use_sql_comments: true
+        jdbc:
+          time_zone: Asia/Ho_Chi_Minh
+
+  # ─────────────────────────────────────────
+  #  Upload file (Multipart)
+  # ─────────────────────────────────────────
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 50MB
+
+# =============================================================
+#  Cấu hình tuỳ chỉnh của TroNhanh
+#  Đọc từ .env: JWT_SECRET, JWT_EXPIRATION, UPLOAD_DIR, UPLOAD_URL_PREFIX
+# =============================================================
+app:
+  jwt:
+    secret: ${JWT_SECRET}
+    expiration: ${JWT_EXPIRATION:86400000}
+
+  upload:
+    dir: ${UPLOAD_DIR:./uploads}
+    url-prefix: ${UPLOAD_URL_PREFIX:http://localhost:8080/uploads}
+
+# =============================================================
+#  Logging
+# =============================================================
+logging:
+  level:
+    com.tronhanh: DEBUG
+    org.springframework.security: INFO
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql: TRACE
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
