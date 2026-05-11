@@ -31,17 +31,9 @@ import AdminUsersPage  from './pages/admin/AdminUsersPage';
 
 // Real pages (Phase 6)
 import ProfilePage    from './pages/shared/ProfilePage';
+import SettingsPage  from './pages/shared/SettingsPage';
 import MessagesPage   from './pages/shared/MessagesPage';
 import SavedRoomsPage from './pages/renter/SavedRoomsPage';
-
-// ── Placeholder — sẽ thay bằng real components ở Phase 5 ──
-const PlaceholderPage = ({ title }: { title: string }) => (
-  <div className="flex flex-col items-center justify-center min-h-[60vh] text-center p-8">
-    <div className="text-6xl mb-4">🚧</div>
-    <h1 className="text-2xl font-bold text-slate-700 mb-2">{title}</h1>
-    <p className="text-slate-500 text-sm">Đang xây dựng — sẽ hoàn thành ở Phase tiếp theo.</p>
-  </div>
-);
 
 // Layout chỉ có Navbar, không có Footer (dùng cho MessagesPage)
 function NavbarOnlyLayout() {
@@ -79,6 +71,13 @@ export default function App() {
           <Route path="profile" element={
             <ProtectedRoute>
               <ProfilePage />
+            </ProtectedRoute>
+          } />
+
+          {/* Cài đặt dùng chung */}
+          <Route path="settings" element={
+            <ProtectedRoute>
+              <SettingsPage />
             </ProtectedRoute>
           } />
 

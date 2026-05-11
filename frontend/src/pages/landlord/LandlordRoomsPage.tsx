@@ -10,18 +10,6 @@ import LandlordService from '../../services/landlordService'
 import { formatPrice } from '../../utils/format'
 import type { Room } from '../../types'
 
-const StatusBadge = ({ status }: { status: string }) => {
-  const map: Record<string, string> = {
-    PENDING: 'badge-pending',
-    APPROVED: 'badge-approved',
-    REJECTED: 'badge-rejected',
-  }
-  const label: Record<string, string> = {
-    PENDING: 'Chờ duyệt', APPROVED: 'Đã duyệt', REJECTED: 'Từ chối',
-  }
-  return <span className={map[status] ?? 'badge-pending'}>{label[status] ?? status}</span>
-}
-
 export default function LandlordRoomsPage() {
   const [rooms, setRooms] = useState<Room[]>([])
   const [loading, setLoading] = useState(true)

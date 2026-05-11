@@ -28,9 +28,7 @@ public interface RoomRepository extends JpaRepository<Room, Long>, JpaSpecificat
 
     /**
      * Tìm kiếm phòng công khai.
-     * - Chỉ trả status=APPROVED và is_hidden=false.
-     * - Tất cả tham số đều optional (null = bỏ qua điều kiện đó).
-     * - keyword tìm theo địa chỉ HOẶC tiêu đề (LIKE, case-insensitive).
+     * - city + cityAlias: để xử lý các tên rút gọn (VD: "Hồ Chí Minh" và "TP.HCM").
      */
     @Query("""
             SELECT r FROM Room r
@@ -44,6 +42,11 @@ public interface RoomRepository extends JpaRepository<Room, Long>, JpaSpecificat
               AND (:keyword IS NULL
                    OR LOWER(r.address) LIKE LOWER(CONCAT('%', :keyword, '%'))
                    OR LOWER(r.title)   LIKE LOWER(CONCAT('%', :keyword, '%')))
+              AND (:isAvailable IS NULL OR r.isAvailable = :isAvailable)
+              AND (:city IS NULL
+                   OR LOWER(r.address) LIKE LOWER(CONCAT('%', :city, '%'))
+                   OR (:cityAlias IS NOT NULL
+                       AND LOWER(r.address) LIKE LOWER(CONCAT('%', :cityAlias, '%'))))
             ORDER BY r.id DESC
             """)
     List<Room> searchRooms(
@@ -53,6 +56,9 @@ public interface RoomRepository extends JpaRepository<Room, Long>, JpaSpecificat
             @Param("maxPrice")   BigDecimal maxPrice,
             @Param("minArea")    BigDecimal minArea,
             @Param("maxArea")    BigDecimal maxArea,
-            @Param("keyword")    String keyword
+            @Param("keyword")    String keyword,
+            @Param("city")       String city,
+            @Param("cityAlias")  String cityAlias,
+            @Param("isAvailable") Boolean isAvailable
     );
 }

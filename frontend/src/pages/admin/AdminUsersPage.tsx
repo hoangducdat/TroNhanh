@@ -52,7 +52,7 @@ export default function AdminUsersPage() {
 
   useEffect(() => { load(filter); }, [filter]);
 
-  const handleToggleLock = async (userId: number, currentlyLocked: boolean) => {
+  const handleToggleLock = async (userId: number) => {
     setToggling(userId);
     try {
       const res = await axiosClient.patch(`/api/admin/users/${userId}/lock`);
@@ -234,7 +234,7 @@ export default function AdminUsersPage() {
                     <td className="px-5 py-4 text-center">
                       {u.role !== 'ADMIN' && (
                         <button
-                          onClick={() => handleToggleLock(u.id, u.locked)}
+                          onClick={() => handleToggleLock(u.id)}
                           disabled={toggling === u.id}
                           className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all active:scale-95 ${
                             u.locked

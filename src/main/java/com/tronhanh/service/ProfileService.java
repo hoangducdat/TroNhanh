@@ -17,4 +17,14 @@ public interface ProfileService {
      * Cập nhật thông tin hồ sơ.
      */
     UserResponse updateProfile(String username, ProfileUpdateRequest request);
+
+    /**
+     * Đổi mật khẩu — kiểm tra mật khẩu hiện tại trước khi lưu mật khẩu mới.
+     */
+    void changePassword(String username, String currentPassword, String newPassword);
+
+    /**
+     * Xóa tài khoản vĩnh viễn — cascade xóa toàn bộ dữ liệu liên quan.
+     */
+    void deleteAccount(String username);
 }

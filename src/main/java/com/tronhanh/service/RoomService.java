@@ -18,9 +18,10 @@ public interface RoomService {
      * Mọi tham số đều optional — null = bỏ qua điều kiện.
      *
      * @param keyword tìm theo địa chỉ HOẶC tiêu đề (LIKE, case-insensitive)
+     * @param city    lọc theo tên thành phố trong địa chỉ (LIKE, case-insensitive)
      */
     List<RoomResponse> searchRooms(Long categoryId, BigDecimal minPrice, BigDecimal maxPrice,
-                                   BigDecimal minArea, BigDecimal maxArea, String keyword);
+                                   BigDecimal minArea, BigDecimal maxArea, String keyword, String city, Boolean isAvailable);
 
     /** Lấy chi tiết một phòng theo ID (public — không lọc status) */
     RoomResponse getRoomById(Long roomId);

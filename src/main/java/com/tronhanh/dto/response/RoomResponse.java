@@ -1,5 +1,6 @@
 package com.tronhanh.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.tronhanh.entity.RoomStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -51,9 +52,11 @@ public class RoomResponse {
     private RoomStatus status;
 
     // ── Trạng thái ẩn (do Landlord tự ẩn/hiện) ──
+    @JsonProperty("isHidden")
     private boolean isHidden;
 
     // ── Trạng thái còn phòng / hết phòng ──
+    @JsonProperty("isAvailable")
     private boolean isAvailable;
 
     /**

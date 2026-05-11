@@ -99,4 +99,6 @@ export interface SearchParams {
   maxPrice?: number;
   minArea?: number;
   maxArea?: number;
+  city?: string;
+  isAvailable?: boolean;
 }

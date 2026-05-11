@@ -34,4 +34,14 @@ public interface SavedRoomRepository extends JpaRepository<SavedRoom, Long> {
     @Modifying
     @Query("DELETE FROM SavedRoom sr WHERE sr.room.id = :roomId")
     void deleteAllByRoomId(@Param("roomId") Long roomId);
+
+    /** Xóa tất cả saved_rooms của một user (renter) — khi xóa tài khoản */
+    @Modifying
+    @Query("DELETE FROM SavedRoom sr WHERE sr.renter.id = :userId")
+    void deleteByUserId(@Param("userId") Long userId);
+
+    /** Xóa tất cả saved_rooms của các phòng thuộc landlord — khi xóa tài khoản landlord */
+    @Modifying
+    @Query("DELETE FROM SavedRoom sr WHERE sr.room.landlord.id = :landlordId")
+    void deleteByRoomLandlordId(@Param("landlordId") Long landlordId);
 }

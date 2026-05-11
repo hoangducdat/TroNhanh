@@ -31,9 +31,10 @@ public class PublicRoomController {
      * Tìm kiếm phòng trọ. Chỉ trả status=APPROVED và is_hidden=false.
      * Tất cả query params đều optional.
      *
-     * ?categoryId=1&minPrice=2000000&maxPrice=5000000&minArea=15&keyword=Bách Khoa
+     * ?categoryId=1&minPrice=2000000&maxPrice=5000000&minArea=15&keyword=Bách Khoa&city=Hà Nội
      *
      * keyword tìm trong address VÀ title (LIKE, case-insensitive).
+     * city lọc theo tên thành phố trong trường address.
      */
     @GetMapping("/search")
     public ResponseEntity<ApiResponse<List<RoomResponse>>> searchRooms(
@@ -42,10 +43,12 @@ public class PublicRoomController {
             @RequestParam(required = false) BigDecimal maxPrice,
             @RequestParam(required = false) BigDecimal minArea,
             @RequestParam(required = false) BigDecimal maxArea,
-            @RequestParam(required = false) String keyword) {
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) String city,
+            @RequestParam(required = false) Boolean isAvailable) {
 
         List<RoomResponse> rooms = roomService.searchRooms(
-                categoryId, minPrice, maxPrice, minArea, maxArea, keyword);
+                categoryId, minPrice, maxPrice, minArea, maxArea, keyword, city, isAvailable);
 
         return ResponseEntity.ok(ApiResponse.success(
                 "Tìm thấy " + rooms.size() + " phòng phù hợp", rooms));

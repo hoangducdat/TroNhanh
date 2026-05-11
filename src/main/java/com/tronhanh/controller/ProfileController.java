@@ -5,6 +5,8 @@ import com.tronhanh.dto.response.ApiResponse;
 import com.tronhanh.dto.response.UserResponse;
 import com.tronhanh.service.ProfileService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -31,5 +33,27 @@ public class ProfileController {
         String username = authentication.getName();
         UserResponse response = profileService.updateProfile(username, request);
         return ResponseEntity.ok(ApiResponse.success("Cập nhật hồ sơ thành công", response));
+    }
+
+    /** Đổi mật khẩu */
+    record ChangePasswordRequest(
+        @NotBlank String currentPassword,
+        @NotBlank @Size(min = 6) String newPassword
+    ) {}
+
+    @PutMapping("/password")
+    public ResponseEntity<ApiResponse<Void>> changePassword(
+            Authentication authentication,
+            @Valid @RequestBody ChangePasswordRequest request) {
+        profileService.changePassword(authentication.getName(),
+                request.currentPassword(), request.newPassword());
+        return ResponseEntity.ok(ApiResponse.success("Đổi mật khẩu thành công", null));
+    }
+
+    /** Xóa tài khoản vĩnh viễn */
+    @DeleteMapping
+    public ResponseEntity<ApiResponse<Void>> deleteAccount(Authentication authentication) {
+        profileService.deleteAccount(authentication.getName());
+        return ResponseEntity.ok(ApiResponse.success("Tài khoản đã được xóa", null));
     }
 }

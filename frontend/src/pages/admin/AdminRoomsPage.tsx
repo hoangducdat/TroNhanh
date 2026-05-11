@@ -5,7 +5,6 @@
 // ============================================================
 
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
 import AdminService from '../../services/adminService'
 import { formatPrice } from '../../utils/format'
 import type { Room } from '../../types'

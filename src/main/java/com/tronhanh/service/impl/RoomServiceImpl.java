@@ -33,6 +33,18 @@ public class RoomServiceImpl implements RoomService {
     private final SavedRoomRepository savedRoomRepository;
     private final FileStorageService fileStorageService;
 
+    /**
+     * Map tên thành phố (in thường) → từ khóa tìm thêm (alias trong địa chỉ).
+     * VD: "Hồ Chí Minh" → cũng tìm "TP.HCM" và ngược lại.
+     */
+    private static final java.util.Map<String, String> CITY_ALIASES = java.util.Map.ofEntries(
+        java.util.Map.entry("hồ chí minh",    "tp.hcm"),
+        java.util.Map.entry("tp.hcm",            "hồ chí minh"),
+        java.util.Map.entry("tp hcm",            "hồ chí minh"),
+        java.util.Map.entry("thừa thiên huế",  "huế"),
+        java.util.Map.entry("huế",              "thừa thiên")
+    );
+
     // ─────────────────────────────────────────────────────────
     //  TÌM KIẾM CÔNG KHAI
     // ─────────────────────────────────────────────────────────
@@ -41,12 +53,16 @@ public class RoomServiceImpl implements RoomService {
     @Transactional(readOnly = true)
     public List<RoomResponse> searchRooms(Long categoryId, BigDecimal minPrice,
                                           BigDecimal maxPrice, BigDecimal minArea,
-                                          BigDecimal maxArea, String keyword) {
-        // Chuẩn hoá keyword: null hoặc blank → null (bỏ qua điều kiện LIKE)
-        String kw = (keyword != null && !keyword.isBlank()) ? keyword.trim() : null;
+                                          BigDecimal maxArea, String keyword, String city, Boolean isAvailable) {
+        String kw    = (keyword != null && !keyword.isBlank()) ? keyword.trim() : null;
+        String city_ = (city   != null && !city.isBlank())   ? city.trim()    : null;
+        // Resolve alias: VD "Hồ Chí Minh" → cũng tìm "TP.HCM"
+        String alias_ = city_ != null
+                ? CITY_ALIASES.get(city_.toLowerCase())
+                : null;
 
         return roomRepository.searchRooms(
-                        RoomStatus.APPROVED, categoryId, minPrice, maxPrice, minArea, maxArea, kw)
+                        RoomStatus.APPROVED, categoryId, minPrice, maxPrice, minArea, maxArea, kw, city_, alias_, isAvailable)
                 .stream()
                 .map(this::mapToResponse)
                 .collect(Collectors.toList());
